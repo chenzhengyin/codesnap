@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import PayPalButton from './PayPalButton.vue';
+
 const emit = defineEmits<{
-  (e: 'upgrade'): void;
+  (e: 'activate'): void;
 }>();
 </script>
 
@@ -14,9 +16,9 @@ const emit = defineEmits<{
         <strong>Upgrade to Pro</strong> — Remove watermark, unlock 50+ themes, and add custom backgrounds.
       </span>
     </div>
-    <button class="upgrade-btn" @click="emit('upgrade')">
-      Upgrade
-    </button>
+    <div class="paypal-wrapper">
+      <PayPalButton container-id="paypal-banner-862XKGDFQTG8C" @success="emit('activate')" />
+    </div>
   </div>
 </template>
 
@@ -46,22 +48,8 @@ const emit = defineEmits<{
   font-weight: 600;
 }
 
-.upgrade-btn {
-  padding: 6px 16px;
-  border-radius: 6px;
-  border: none;
-  background: #aa3bff;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-  white-space: nowrap;
+.paypal-wrapper {
   flex-shrink: 0;
-}
-
-.upgrade-btn:hover {
-  background: #9333ea;
 }
 
 @media (max-width: 600px) {
@@ -72,6 +60,11 @@ const emit = defineEmits<{
   }
 
   .banner-content {
+    justify-content: center;
+  }
+
+  .paypal-wrapper {
+    display: flex;
     justify-content: center;
   }
 }

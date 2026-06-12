@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { themes, languages, type ThemeKey } from '../themes';
 import ProBadge from './ProBadge.vue';
+import PayPalButton from './PayPalButton.vue';
 
 const props = defineProps<{
   currentTheme: ThemeKey;
@@ -20,7 +21,7 @@ const emit = defineEmits<{
   (e: 'update:fontSize', value: number): void;
   (e: 'update:language', value: string): void;
   (e: 'export', scale: number): void;
-  (e: 'upgrade'): void;
+  (e: 'activate'): void;
   (e: 'uploadBg', file: File): void;
   (e: 'uploadLogo', file: File): void;
   (e: 'clearBg'): void;
@@ -38,7 +39,7 @@ const themeList = computed(() =>
 function handleThemeChange(key: ThemeKey) {
   const theme = themes[key];
   if (theme.tier === 'pro' && !props.isPro) {
-    emit('upgrade');
+    emit('activate');
     return;
   }
   emit('update:currentTheme', key);
@@ -156,12 +157,7 @@ function onFileChange(event: Event, type: 'bg' | 'logo') {
     </div>
 
     <div v-if="!isPro" class="settings-group upgrade-group">
-      <button class="upgrade-cta" @click="emit('upgrade')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-        </svg>
-        Unlock Pro — $9
-      </button>
+      <PayPalButton container-id="paypal-settings-862XKGDFQTG8C" @success="emit('activate')" />
     </div>
   </div>
 </template>

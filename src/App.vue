@@ -19,7 +19,7 @@ const {
   language,
 } = useSettings();
 const { isExporting, exportPNG } = useExport();
-const { isPro, openCheckout } = usePro();
+const { isPro, activatePro } = usePro();
 const { backgroundImage, logoImage, handleFileUpload, clearAsset } = useCustomAssets();
 
 const previewCardRef = ref<InstanceType<typeof PreviewCard> | null>(null);
@@ -34,7 +34,7 @@ async function handleExport(scale: number) {
 
 <template>
   <div class="app-container">
-    <UpgradeBanner v-if="!isPro" @upgrade="openCheckout" />
+    <UpgradeBanner v-if="!isPro" @activate="activatePro" />
 
     <header class="app-header">
       <h1>
@@ -72,7 +72,7 @@ async function handleExport(scale: number) {
       :is-exporting="isExporting"
       :is-pro="isPro"
       @export="handleExport"
-      @upgrade="openCheckout"
+      @activate="activatePro"
       @upload-bg="handleFileUpload($event, 'bg')"
       @upload-logo="handleFileUpload($event, 'logo')"
       @clear-bg="clearAsset('bg')"
