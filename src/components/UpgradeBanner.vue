@@ -1,71 +1,58 @@
 <script setup lang="ts">
-import PayPalButton from './PayPalButton.vue';
-
 const emit = defineEmits<{
-  (e: 'activate'): void;
+  showModal: [];
 }>();
 </script>
 
 <template>
-  <div class="upgrade-banner">
+  <div class="upgrade-banner" @click="emit('showModal')">
     <div class="banner-content">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
       </svg>
-      <span>
-        <strong>Upgrade to Pro</strong> — Remove watermark, unlock 50+ themes, and add custom backgrounds.
-      </span>
-    </div>
-    <div class="paypal-wrapper">
-      <PayPalButton container-id="paypal-banner-862XKGDFQTG8C" @success="emit('activate')" />
+      <span>Upgrade to Pro — Remove watermark, unlock 50+ themes, custom backgrounds. <strong>Click to upgrade</strong></span>
     </div>
   </div>
 </template>
 
 <style scoped>
 .upgrade-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 12px 20px;
-  margin-bottom: 16px;
-  background: linear-gradient(90deg, rgba(170, 59, 255, 0.15), rgba(251, 191, 36, 0.08));
-  border: 1px solid rgba(170, 59, 255, 0.3);
-  border-radius: 10px;
+  padding: 8px 16px;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, rgba(170, 59, 255, 0.12), rgba(251, 191, 36, 0.06));
+  border: 1px solid rgba(170, 59, 255, 0.25);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.upgrade-banner:hover {
+  border-color: rgba(170, 59, 255, 0.5);
+  background: linear-gradient(90deg, rgba(170, 59, 255, 0.18), rgba(251, 191, 36, 0.1));
 }
 
 .banner-content {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: #d1d5db;
+  gap: 8px;
+  font-size: 12px;
+  color: #9ca3af;
 }
 
 .banner-content strong {
   color: #fbbf24;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-.paypal-wrapper {
-  flex-shrink: 0;
+.banner-content span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (max-width: 600px) {
-  .upgrade-banner {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-  }
-
-  .banner-content {
-    justify-content: center;
-  }
-
-  .paypal-wrapper {
-    display: flex;
-    justify-content: center;
+  .banner-content span {
+    white-space: normal;
   }
 }
 </style>

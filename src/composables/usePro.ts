@@ -1,27 +1,23 @@
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 
 const PRO_KEY = 'codesnap_pro';
 
-export function usePro() {
-  const isPro = ref(false);
-
-  onMounted(() => {
-    isPro.value = localStorage.getItem(PRO_KEY) === 'true';
-    checkActivationFromURL();
-  });
-
-  function checkActivationFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('activated') === 'success') {
-      activatePro();
-      window.history.replaceState({}, '', window.location.pathname);
-    }
+function getInitialProStatus(): boolean {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('activated') === 'success') {
+    localStorage.setItem(PRO_KEY, 'true');
+    window.history.replaceState({}, '', window.location.pathname);
+    return true;
   }
+  return localStorage.getItem(PRO_KEY) === 'true';
+}
+
+export function usePro() {
+  const isPro = ref(getInitialProStatus());
 
   function activatePro() {
     localStorage.setItem(PRO_KEY, 'true');
     isPro.value = true;
-    window.location.reload();
   }
 
   return {

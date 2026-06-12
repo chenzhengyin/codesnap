@@ -4,6 +4,7 @@ import CodeEditor from './components/CodeEditor.vue';
 import PreviewCard from './components/PreviewCard.vue';
 import SettingsPanel from './components/SettingsPanel.vue';
 import UpgradeBanner from './components/UpgradeBanner.vue';
+import UpgradeModal from './components/UpgradeModal.vue';
 import { useCodeEditor } from './composables/useCodeEditor';
 import { useSettings } from './composables/useSettings';
 import { useExport } from './composables/useExport';
@@ -23,18 +24,34 @@ const { isPro, activatePro } = usePro();
 const { backgroundImage, logoImage, handleFileUpload, clearAsset } = useCustomAssets();
 
 const previewCardRef = ref<InstanceType<typeof PreviewCard> | null>(null);
+const modalVisible = ref(false);
+
+function showModal() {
+  modalVisible.value = true;
+}
+
+function handleActivate() {
+  modalVisible.value = false;
+  activatePro();
+}
 
 async function handleExport(scale: number) {
   const card = previewCardRef.value?.cardRef;
   if (card) {
-    await exportPNG(card, scale, { isPro: isPro.value });
+    await exportPNG(card, scale);
   }
 }
 </script>
 
 <template>
   <div class="app-container">
-    <UpgradeBanner v-if="!isPro" @activate="activatePro" />
+    <UpgradeBanner v-if="!isPro" @showModal="showModal" />
+
+    <UpgradeModal
+      :visible="modalVisible"
+      @close="modalVisible = false"
+      @activate="handleActivate"
+    />
 
     <header class="app-header">
       <h1>
@@ -59,6 +76,7 @@ async function handleExport(scale: number) {
           :font-size="fontSize"
           :background-image="backgroundImage"
           :logo-image="logoImage"
+          :is-pro="isPro"
         />
       </div>
     </main>
@@ -72,7 +90,7 @@ async function handleExport(scale: number) {
       :is-exporting="isExporting"
       :is-pro="isPro"
       @export="handleExport"
-      @activate="activatePro"
+      @showModal="showModal"
       @upload-bg="handleFileUpload($event, 'bg')"
       @upload-logo="handleFileUpload($event, 'logo')"
       @clear-bg="clearAsset('bg')"

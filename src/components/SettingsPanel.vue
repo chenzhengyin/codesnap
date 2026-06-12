@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 import { themes, languages, type ThemeKey } from '../themes';
 import ProBadge from './ProBadge.vue';
-import PayPalButton from './PayPalButton.vue';
 
 const props = defineProps<{
   currentTheme: ThemeKey;
@@ -21,7 +20,7 @@ const emit = defineEmits<{
   (e: 'update:fontSize', value: number): void;
   (e: 'update:language', value: string): void;
   (e: 'export', scale: number): void;
-  (e: 'activate'): void;
+  (e: 'showModal'): void;
   (e: 'uploadBg', file: File): void;
   (e: 'uploadLogo', file: File): void;
   (e: 'clearBg'): void;
@@ -39,7 +38,7 @@ const themeList = computed(() =>
 function handleThemeChange(key: ThemeKey) {
   const theme = themes[key];
   if (theme.tier === 'pro' && !props.isPro) {
-    emit('activate');
+    emit('showModal');
     return;
   }
   emit('update:currentTheme', key);
@@ -157,7 +156,9 @@ function onFileChange(event: Event, type: 'bg' | 'logo') {
     </div>
 
     <div v-if="!isPro" class="settings-group upgrade-group">
-      <PayPalButton container-id="paypal-settings-862XKGDFQTG8C" @success="emit('activate')" />
+      <button class="upgrade-link" @click="emit('showModal')">
+        Unlock Pro — $5
+      </button>
     </div>
   </div>
 </template>
@@ -321,22 +322,19 @@ function onFileChange(event: Event, type: 'bg' | 'logo') {
   min-width: auto;
 }
 
-.upgrade-cta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 8px;
+.upgrade-link {
+  padding: 6px 14px;
+  border-radius: 6px;
   border: none;
   background: linear-gradient(135deg, #aa3bff, #f59e0b);
   color: #fff;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
 }
 
-.upgrade-cta:hover {
+.upgrade-link:hover {
   opacity: 0.9;
 }
 

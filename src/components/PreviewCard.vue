@@ -13,6 +13,7 @@ const props = defineProps<{
   fontSize: number;
   backgroundImage?: string;
   logoImage?: string;
+  isPro?: boolean;
 }>();
 
 const cardRef = ref<HTMLDivElement | null>(null);
@@ -61,6 +62,7 @@ defineExpose({ cardRef });
         <pre><code class="hljs" v-html="highlightedCode"></code></pre>
       </div>
       <img v-if="logoImage" class="custom-logo" :src="logoImage" alt="logo" />
+      <div v-if="!isPro" class="watermark">Made by CodeSnap</div>
     </div>
   </div>
 </template>
@@ -138,5 +140,22 @@ defineExpose({ cardRef });
   object-fit: contain;
   z-index: 2;
   opacity: 0.85;
+}
+
+.watermark {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.85);
+  color: rgba(0, 0, 0, 0.85);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 6px;
+  pointer-events: none;
+  z-index: 3;
+  letter-spacing: 0.3px;
+  user-select: none;
 }
 </style>
